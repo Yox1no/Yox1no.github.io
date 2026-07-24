@@ -1,0 +1,22 @@
+baseURL = 'https://horikitax.github.io/'
+locale = 'zh-CN'
+title = "Horikitax's Blog"
+timezone = 'Asia/Shanghai'
+
+# 主题——等垚选了主题后再改这里～
+theme = ''
+
+# 文章默认设置
+[params]
+  description = 'Horikitax 的技术博客 | 有爱莉希雅出没 ♡'
+
+# 内容结构
+[menu]
+
+# 输出格式
+[outputs]
+  home = ['HTML', 'RSS', 'JSON']
+
+# 分页
+[pagination]
+  pagerSize = 10

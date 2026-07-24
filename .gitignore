@@ -1,0 +1,14 @@
+# Hugo 默认输出
+public/
+resources/
+
+# 编辑器/系统
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# 依赖（如果用主题模块的话）
+node_modules/
+package-lock.json
