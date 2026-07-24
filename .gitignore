@@ -1,6 +1,8 @@
 # Hugo 默认输出
 public/
 resources/
+.hugo_build.lock
+assets/jsconfig.json
 
 # 编辑器/系统
 .DS_Store

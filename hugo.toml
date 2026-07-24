@@ -4,40 +4,8 @@ title = "Horikitax's Blog"
 timezone = 'Asia/Shanghai'
 theme = 'hugo-theme-stack'
 
-# 文章默认设置
-[params]
-  description = "Horikitax's Blog — 技术笔记 | 有爱莉希雅出没 ♡"
-  mainSections = ["post", "elysia"]
-
-  # 侧栏
-  [params.sidebar]
-    compact = false
-    avatar = ""
-
-  # 文章
-  [params.article]
-    headingAnchor = false
-    toc = true
-    readingTime = true
-
-  # 页脚
-  [params.footer]
-    since = 2026
-    customText = ""
-
-  # 颜色方案
-  [params.colorScheme]
-    toggle = true
-    default = "auto"
-
-  # 文章列表
-  [params.article.list]
-    showTags = false
-
-# 输出格式
 [outputs]
   home = ['HTML', 'RSS', 'JSON']
 
-# 分页
 [pagination]
   pagerSize = 10

@@ -1,0 +1,43 @@
+mainSections = ["post", "elysia"]
+rssFullContent = true
+
+SortBy = "default"
+
+[footer]
+since = 2026
+customText = ""
+
+[dateFormat]
+published = ":date_full"
+lastUpdated = ":date_full"
+
+[sidebar]
+compact = true
+emoji = ""
+subtitle = "技术笔记 · 偶尔有爱莉希雅出没 ♡"
+avatar = ""
+
+[article]
+headingAnchor = false
+math = false
+toc = true
+readingTime = true
+
+[article.list]
+showTags = false
+
+[article.license]
+enabled = false
+
+[widgets]
+homepage = [
+  { type = "search" },
+  { type = "archives", params = { limit = 5 } },
+]
+page = [
+  { type = "toc" },
+]
+
+[colorScheme]
+toggle = true
+default = "auto"

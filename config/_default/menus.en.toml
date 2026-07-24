@@ -1,0 +1,17 @@
+[[main]]
+  identifier = "home"
+  name = "Home"
+  url = "/"
+  weight = 10
+
+[[main]]
+  identifier = "archives"
+  name = "Archives"
+  url = "/archives/"
+  weight = 20
+
+[[main]]
+  identifier = "elysia"
+  name = "🌸 爱莉希雅"
+  url = "/elysia/"
+  weight = 30
