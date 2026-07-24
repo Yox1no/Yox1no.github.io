@@ -2,16 +2,37 @@ baseURL = 'https://horikitax.github.io/'
 locale = 'zh-CN'
 title = "Horikitax's Blog"
 timezone = 'Asia/Shanghai'
-
-# 主题——等垚选了主题后再改这里～
-theme = ''
+theme = 'hugo-theme-stack'
 
 # 文章默认设置
 [params]
-  description = 'Horikitax 的技术博客 | 有爱莉希雅出没 ♡'
+  description = "Horikitax's Blog — 技术笔记 | 有爱莉希雅出没 ♡"
+  mainSections = ["post", "elysia"]
 
-# 内容结构
-[menu]
+  # 侧栏
+  [params.sidebar]
+    compact = false
+    avatar = ""
+
+  # 文章
+  [params.article]
+    headingAnchor = false
+    toc = true
+    readingTime = true
+
+  # 页脚
+  [params.footer]
+    since = 2026
+    customText = ""
+
+  # 颜色方案
+  [params.colorScheme]
+    toggle = true
+    default = "auto"
+
+  # 文章列表
+  [params.article.list]
+    showTags = false
 
 # 输出格式
 [outputs]
