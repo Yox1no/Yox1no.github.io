@@ -47,3 +47,6 @@ SortBy = "default"
 
 [cookies]
   enabled = false
+
+[comments]
+  enabled = false
