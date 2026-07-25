@@ -3,6 +3,7 @@ title: "Hello 新世界 ✨"
 description: "博客重启的第一篇～"
 date: 2026-07-25T00:00:00+08:00
 draft: false
+image: featured.jpg
 tags:
   - hello
   - 日常

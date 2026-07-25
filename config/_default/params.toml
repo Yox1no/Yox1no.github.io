@@ -1,5 +1,6 @@
 mainSections = ["post", "elysia"]
 rssFullContent = true
+favicon = "img/crystal-flower.svg"
 
 SortBy = "default"
 
@@ -13,8 +14,8 @@ SortBy = "default"
 
 [sidebar]
   compact = false
-  emoji = "🖥️"
-  subtitle = "技术笔记 · 记录所学与所想"
+  emoji = ""
+  subtitle = "新的一天从一场美妙的邂逅开始～♪"
   avatar = "img/avatar.png"
 
 [article]
