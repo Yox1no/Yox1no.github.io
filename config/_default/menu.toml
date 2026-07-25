@@ -1,6 +1,6 @@
 [[main]]
   identifier = "home"
-  name = "Home"
+  name = "主页"
   url = "/"
   weight = 10
 
@@ -9,7 +9,7 @@
 
 [[main]]
   identifier = "about"
-  name = "About"
+  name = "关于"
   url = "/about/"
   weight = 20
 
@@ -18,7 +18,7 @@
 
 [[main]]
   identifier = "archives"
-  name = "Archives"
+  name = "归档"
   url = "/archives/"
   weight = 30
 
@@ -27,21 +27,12 @@
 
 [[main]]
   identifier = "search"
-  name = "Search"
+  name = "搜索"
   url = "/search/"
   weight = 40
 
   [main.params]
     icon = "search"
-
-[[main]]
-  identifier = "elysia"
-  name = "🌸 爱莉希雅"
-  url = "/elysia/"
-  weight = 50
-
-  [main.params]
-    icon = "categories"
 
 [[social]]
   identifier = "github"

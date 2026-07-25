@@ -13,8 +13,8 @@ SortBy = "default"
 
 [sidebar]
   compact = false
-  emoji = "🌸"
-  subtitle = "技术笔记 · 偶尔有爱莉希雅出没 ♡"
+  emoji = "🖥️"
+  subtitle = "技术笔记 · 记录所学与所想"
   avatar = "img/avatar.png"
 
 [article]
