@@ -1,6 +1,6 @@
 mainSections = ["post", "elysia"]
 rssFullContent = true
-favicon = "img/crystal-flower.svg"
+favicon = "img/favicon-elysia.png"
 
 SortBy = "default"
 
