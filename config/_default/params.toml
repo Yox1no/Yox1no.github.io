@@ -15,7 +15,7 @@ SortBy = "default"
 [sidebar]
   compact = false
   emoji = ""
-  subtitle = "新的一天从一场美妙的邂逅开始～♪"
+  subtitle = "新的一天，<br>从一场美妙的邂逅开始～♪"
   avatar = "img/avatar.png"
 
 [article]
