@@ -6,6 +6,7 @@ draft: false
 tags:
   - hello
   - 日常
+  - Hugo
 categories:
   - 日常
 ---
