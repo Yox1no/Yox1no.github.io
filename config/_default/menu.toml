@@ -1,0 +1,45 @@
+[[main]]
+  identifier = "home"
+  name = "Home"
+  url = "/"
+  weight = 10
+
+[[main]]
+  identifier = "archives"
+  name = "Archives"
+  url = "/archives/"
+  weight = 20
+
+[[main]]
+  identifier = "about"
+  name = "About"
+  url = "/about/"
+  weight = 25
+
+[[main]]
+  identifier = "elysia"
+  name = "🌸 爱莉希雅"
+  url = "/elysia/"
+  weight = 30
+
+[[main]]
+  identifier = "search"
+  name = "Search"
+  url = "/search/"
+  weight = 40
+
+[[social]]
+  identifier = "github"
+  name = "GitHub"
+  url = "https://github.com/Horikitax"
+
+  [social.params]
+    icon = "brand-github"
+
+[[social]]
+  identifier = "twitter"
+  name = "Twitter"
+  url = "https://x.com/Horikitax"
+
+  [social.params]
+    icon = "brand-twitter"

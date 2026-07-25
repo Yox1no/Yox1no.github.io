@@ -4,40 +4,46 @@ rssFullContent = true
 SortBy = "default"
 
 [footer]
-since = 2026
-customText = ""
+  since = 2026
+  customText = ""
 
 [dateFormat]
-published = ":date_full"
-lastUpdated = ":date_full"
+  published = ":date_full"
+  lastUpdated = ":date_full"
 
 [sidebar]
-compact = true
-emoji = ""
-subtitle = "技术笔记 · 偶尔有爱莉希雅出没 ♡"
-avatar = ""
+  compact = false
+  emoji = "🌸"
+  subtitle = "技术笔记 · 偶尔有爱莉希雅出没 ♡"
+  avatar = "img/avatar.png"
 
 [article]
-headingAnchor = false
-math = false
-toc = true
-readingTime = true
+  headingAnchor = false
+  math = false
+  toc = true
+  readingTime = true
 
 [article.list]
-showTags = false
+  showTags = true
 
 [article.license]
-enabled = false
+  enabled = true
+  default = "Licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)"
 
 [widgets]
-homepage = [
-  { type = "search" },
-  { type = "archives", params = { limit = 5 } },
-]
-page = [
-  { type = "toc" },
-]
+  homepage = [
+    { type = "search" },
+    { type = "archives", params = { limit = 5 } },
+    { type = "categories", params = { limit = 10 } },
+    { type = "tag-cloud", params = { limit = 10 } },
+  ]
+  page = [
+    { type = "toc" },
+  ]
 
 [colorScheme]
-toggle = true
-default = "auto"
+  toggle = true
+  default = "auto"
+
+[cookies]
+  enabled = false

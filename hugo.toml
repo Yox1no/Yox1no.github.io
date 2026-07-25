@@ -3,9 +3,15 @@ locale = 'zh-CN'
 title = "Horikitax's Blog"
 timezone = 'Asia/Shanghai'
 theme = 'hugo-theme-stack'
+defaultContentLanguage = "zh-cn"
+hasCJKLanguage = true
 
 [outputs]
-  home = ['HTML', 'RSS', 'JSON']
+  home = ['HTML', 'RSS']
 
 [pagination]
   pagerSize = 10
+
+[permalinks]
+  post = "/p/:slug/"
+  page = "/:slug/"
