@@ -3,7 +3,7 @@ locale = 'zh-CN'
 title = "Horikitax's Blog"
 timezone = 'Asia/Shanghai'
 theme = 'hugo-theme-stack'
-defaultContentLanguage = "zh-cn"
+defaultContentLanguage = "zh"
 hasCJKLanguage = true
 
 [outputs]

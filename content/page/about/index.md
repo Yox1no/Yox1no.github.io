@@ -2,11 +2,6 @@
 title: "About"
 date: 2026-07-25
 slug: "about"
-menu:
-    main:
-        weight: -50
-        params: 
-            icon: user
 ---
 # 关于我 ♡
 

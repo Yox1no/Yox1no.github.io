@@ -4,29 +4,44 @@
   url = "/"
   weight = 10
 
-[[main]]
-  identifier = "archives"
-  name = "Archives"
-  url = "/archives/"
-  weight = 20
+  [main.params]
+    icon = "home"
 
 [[main]]
   identifier = "about"
   name = "About"
   url = "/about/"
-  weight = 25
+  weight = 20
+
+  [main.params]
+    icon = "user"
 
 [[main]]
-  identifier = "elysia"
-  name = "🌸 爱莉希雅"
-  url = "/elysia/"
+  identifier = "archives"
+  name = "Archives"
+  url = "/archives/"
   weight = 30
+
+  [main.params]
+    icon = "archives"
 
 [[main]]
   identifier = "search"
   name = "Search"
   url = "/search/"
   weight = 40
+
+  [main.params]
+    icon = "search"
+
+[[main]]
+  identifier = "elysia"
+  name = "🌸 爱莉希雅"
+  url = "/elysia/"
+  weight = 50
+
+  [main.params]
+    icon = "categories"
 
 [[social]]
   identifier = "github"
