@@ -1,9 +1,11 @@
 <style>
-    /* 左侧边栏加宽，让slogan不折行 */
-    .container.extended {
-        --left-sidebar-max-width: 28% !important;
+    /* 左边栏左移：减少容器两侧内边距 */
+    .main-container {
+        --container-padding: 5px !important;
     }
-    .container.compact {
-        --left-sidebar-max-width: 28% !important;
+    @media (min-width: 768px) {
+        .main-container {
+            --container-padding: 10px !important;
+        }
     }
 </style>
