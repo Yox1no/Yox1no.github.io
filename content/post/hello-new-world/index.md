@@ -14,7 +14,7 @@ categories:
 
 # 嘿，好久不见～
 
-这里是 **Horikitax's Blog** 的新家，欢迎回来～♪
+这里是 **Yox1no** 的新家，欢迎回来～♪
 
 ## 关于我
 
@@ -42,7 +42,7 @@ categories:
 
 ### 关于新 ID
 
-现在我叫 **Horikitax** 了。源自《实力至上主义教室》的堀北铃音 (Horikita) + x 后缀。
+现在我叫 **Yox1no** 了。从四糸乃（Yoshino）变体而来，sh→x, i→1。
 以前叫 GaoYao2023，总觉得太随意了，这次统一一下。
 
 ## 以后会写什么

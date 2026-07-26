@@ -37,7 +37,7 @@
 [[social]]
   identifier = "github"
   name = "GitHub"
-  url = "https://github.com/Horikitax"
+  url = "https://github.com/Yox1no"
 
   [social.params]
     icon = "brand-github"
@@ -45,7 +45,7 @@
 [[social]]
   identifier = "twitter"
   name = "Twitter"
-  url = "https://x.com/Horikitax"
+  url = "https://x.com/Yox1no"
 
   [social.params]
     icon = "brand-twitter"

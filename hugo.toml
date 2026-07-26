@@ -1,6 +1,6 @@
-baseURL = 'https://horikitax.github.io/'
+baseURL = 'https://yox1no.github.io/'
 locale = 'zh-CN'
-title = "Horikitax's Blog"
+title = "Yox1no's Blog"
 timezone = 'Asia/Shanghai'
 theme = 'hugo-theme-stack'
 defaultContentLanguage = "zh"
