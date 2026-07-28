@@ -3,6 +3,7 @@ title: "Attention Is All You Need"
 description: "Transformer 奠基之作，改变了 NLP 的论文"
 date: 2026-07-26T12:00:00+08:00
 draft: false
+image: featured.jpg
 tags:
   - paper
   - deep learning
