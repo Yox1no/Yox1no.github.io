@@ -19,62 +19,89 @@ categories:
 - **发表**：NeurIPS 2017
 - **论文地址**：[https://arxiv.org/abs/1706.03762](https://arxiv.org/abs/1706.03762)
 
-## 背景：为什么需要这篇论文
+## 背景
 
-2017 年之前，序列转录任务（比如机器翻译）的主流方案是 RNN / LSTM，配上 encoder-decoder 架构。RNN 的问题是：计算是串行的，每一个时间步依赖上一个时间步的隐状态，没法并行。长序列上更明显——梯度消失、训练慢。
+在 Transformer 出现之前，序列转录任务（如机器翻译）的主流方案是 RNN/LSTM + Attention。RNN 的核心问题是计算是时序依赖的——每个时间步的隐状态 h_t = f(h_{t-1}, x_t)，必须等上一步算完才能算下一步。这导致训练时无法并行，长序列上尤其严重。
 
-注意力机制当时已经有人用了，但通常只是作为 RNN 的附属品，比如在 decoder 端对 encoder 的输出做 attention。
+Attention 机制当时已经存在，被用来让 decoder 在生成每个词时，可以"关注" encoder 的不同位置。但 attention 只是 RNN 的一个补充模块，整体架构依然受限于 RNN 的串行计算。
 
-这篇论文的核心思路很直接：**把 RNN 扔掉，只用注意力机制。**
+与此同时，也有一些非RNN的尝试，比如用 CNN 做序列建模（ByteNet、ConvS2S），通过卷积层堆叠来捕捉长距离依赖，但路径长度随距离增长（线性或对数），依然不够理想。
+
+这篇论文的核心贡献就是：**抛弃 RNN 和 CNN，只用 attention 机制构建一个完整的序列转录模型。**
 
 ## 模型架构
 
 ### 整体结构
 
-标准的 encoder-decoder 架构，但 encoder 和 decoder 都由 Transformer 块堆叠而成（base 模型是 6 层）。
+标准的 encoder-decoder 架构。Encoder 和 decoder 都由 N=6 个相同的层堆叠而成。每个 encoder 层包含两个子层：multi-head self-attention 和 feed-forward network。Decoder 层在中间多插了一个 encoder-decoder attention 子层，用于关注 encoder 的输出。
+
+每个子层都加了残差连接和 layer normalization，即输出为 LayerNorm(x + Sublayer(x))。所有子层和 embedding 层的输出维度都是 d_model = 512。
 
 ### Scaled Dot-Product Attention
 
-核心公式：
+这是最核心的计算单元。给定 query、key、value，输出是 value 的加权和，权重由 query 和 key 的兼容度决定：
 
 ```
-Attention(Q, K, V) = softmax(QK^T / √d_k) V
+Attention(Q, K, V) = softmax(Q K^T / √d_k) V
 ```
 
-Q 和 K 做点积，除以 √d_k 做 scaling，softmax 归一化成权重，再对 V 加权求和。
+具体来说：Q 和 K 做点积，得到每个 query 对所有 key 的注意力分数。除以 √d_k 做 scaling——这是因为 d_k 较大时点积的值会变大，把 softmax 推到梯度极小的区域，缩放后能保持梯度的稳定。然后 softmax 归一化得到权重，最后对 V 加权求和。
 
-Scaling 这步很关键——维度大了以后点积的值会变大，把 softmax 推到梯度很小的区域，除以 √d_k 拉回来。
+实验中用的 d_k = 64，√d_k = 8，刚好把点积的方差拉回 1 左右。
 
 ### Multi-Head Attention
 
-不只用一组注意力，而是把 Q、K、V 分别线性投影到 h 个子空间（base 模型 h=8），各算一次 attention，然后拼接起来再过一次线性层。
+与其用单个 attention 函数，作者把 Q、K、V 分别线性投影到 h=8 个低维子空间（d_k = d_v = d_model/h = 64），在每个子空间独立算 attention，然后把结果拼接起来再过一次线性层：
 
-效果是让模型能在不同的表示子空间里关注不同位置的信息。
+```
+MultiHead(Q, K, V) = Concat(head_1, ..., head_h) W^O
+head_i = Attention(Q W_i^Q, K W_i^K, V W_i^V)
+```
+
+这么做的好处是模型可以在不同的子空间里学到不同类型的注意力模式——有的 head 关注语法关系，有的关注长距离依赖，有的关注指代消解。
+
+### 三种 Attention 用法
+
+1. **Encoder self-attention**：每个位置可以关注 encoder 前一层的所有位置
+2. **Decoder masked self-attention**：每个位置只能关注它之前的位置（包括自己），通过 mask 禁止看到未来信息，保证自回归生成
+3. **Encoder-decoder attention**：decoder 的 query 关注 encoder 的输出，类似传统 seq2seq 的 attention
 
 ### Positional Encoding
 
-既然没有 RNN 也没有 CNN，模型天生不知道词的顺序。解决方案是给输入加位置编码。
+Self-attention 本身是置换不变的——改变输入顺序，输出也会跟着置换，模型感知不到词的先后顺序。所以需要显式注入位置信息。
 
-用了正弦/余弦函数：
+作者用了正弦/余弦函数生成位置编码：
 
 ```
 PE(pos, 2i)   = sin(pos / 10000^{2i/d_model})
 PE(pos, 2i+1) = cos(pos / 10000^{2i/d_model})
 ```
 
-这个设计有个好处：对于任意固定的偏移 k，PE(pos+k) 可以表示为 PE(pos) 的线性函数，模型容易学到相对位置关系。
+这个设计的精妙之处在于：
+- 每个位置的编码是唯一的
+- 不同维度对应不同的频率，低维变化快（编码局部位置），高维变化慢（编码全局位置）
+- 对于任意偏移 k，PE(pos+k) 可以用 PE(pos) 的线性变换表示，方便模型学习相对位置
 
-作者也试过用可学习的位置编码，效果差不多，但正弦版本能外推到更长的序列。
+作者也试过用可学习的位置嵌入，效果几乎一样，但正弦版本能泛化到训练时没见过的序列长度。
 
-### 其他组件
+### Position-wise FFN
 
-- **Feed-Forward Network**：每个 attention 子层之后接一个两层全连接网络（ReLU 激活），d_ff = 2048，d_model = 512
-- **残差连接 + LayerNorm**：每个子层输出为 LayerNorm(x + Sublayer(x))
-- **Dropout**：子层输出、embedding 和位置编码之和上都加了 dropout（rate=0.1）
+每个 attention 子层后面接一个两层全连接网络，d_ff = 2048，d_model = 512：
+
+```
+FFN(x) = max(0, x W_1 + b_1) W_2 + b_2
+```
+
+隐层用 ReLU 激活，相当于对每个位置独立做两个线性变换，中间扩维再降维。从卷积角度看，就是两层 kernel size=1 的卷积。
+
+### 其他训练技巧
+
+- **Dropout**：rate=0.1，用在每个子层输出上、embedding 和位置编码的加和上
+- **Label Smoothing**：ε_ls=0.1，让模型不那么自信，虽然困惑度会变差但 BLEU 更高
 
 ## Why Self-Attention
 
-作者用一个表格直接对比了三种层的计算复杂度：
+作者从三个角度对比了 self-attention、recurrent 和 convolutional 三种层：
 
 | 层类型 | 每层复杂度 | 序列操作数 | 最大路径长度 |
 |--------|-----------|-----------|------------|
@@ -82,42 +109,54 @@ PE(pos, 2i+1) = cos(pos / 10000^{2i/d_model})
 | Recurrent | O(n·d²) | O(n) | O(n) |
 | Convolutional | O(k·n·d²) | O(1) | O(log_k(n)) |
 
-n 是序列长度，d 是表示维度。通常 n < d（比如 n=100, d=512），所以 Self-Attention 的 O(n²·d) 实际不比 RNN 的 O(n·d²) 差，而且最关键的是：**路径长度是 O(1)**，任意两个位置可以直接交互，不存在长距离依赖问题。
+n 是序列长度，d 是表示维度。实践中 n 远小于 d（句子通常几十到一百词，d=512），所以 self-attention 的 O(n²·d) 实际算起来并不比 RNN 的 O(n·d²) 差。而且 self-attention 的最大路径长度是 O(1)，任意两个位置的词可以直接交互，不存在长距离依赖问题。RNN 需要 O(n) 步才能把信息传过去，CNN 也需要 O(log_k(n)) 层。
 
 ## 训练与结果
 
 ### 机器翻译
 
-在 WMT 2014 英德翻译上，transformer big 模型 BLEU 28.4，超过之前所有模型（包括 ensemble）2 个点以上。8 块 P100 训了 3.5 天。
+| 模型 | EN-DE BLEU | EN-FR BLEU | 训练成本 |
+|------|-----------|-----------|---------|
+| Transformer (base) | 27.3 | 38.1 | 3.3 × 10^18 FLOPs |
+| Transformer (big) | 28.4 | 41.8 | 2.3 × 10^19 FLOPs |
+| 之前最佳 (ensemble) | 26.36 | 41.29 | ~10^20 FLOPs |
 
-在英法翻译上，BLEU 41.8，单模型 SOTA，训练成本不到之前最好模型的 1/4。
+在英德翻译上，big 模型 BLEU 28.4，超过之前所有模型（包括 ensemble）2 个 BLEU。在英法翻译上，BLEU 41.8，单模型 SOTA，训练成本不到之前最佳模型的 1/4，8 块 P100 训了 3.5 天。
 
 ### 消融实验
 
-作者做了一组 ablation，核心发现：
-- 单头注意力比多头差 ~0.9 BLEU
-- 减少 key 的维度（d_k）会明显掉点
-- 模型越大效果越好
-- Dropout 对防止过拟合很重要
-- 正弦位置编码和可学习的版本效果基本一样
+作者对关键设计做了系统的消融实验：
+
+- **注意力头数**：单头比最优设置差约 0.9 BLEU，头数太多也不行（16 头开始掉）
+- **key 维度**：减小 d_k 会明显掉点，说明计算 query-key 兼容性并不容易
+- **模型大小**：更大的 d_model、d_ff 都有提升
+- **Dropout**：不加 dropout 会严重过拟合，BLEU 从 25.8 掉到 24.6
+- **Label Smoothing**：确实有帮助
+- **位置编码**：正弦 vs 可学习，效果几乎一样
 
 ### 句法分析
 
-在 Penn Treebank 上用 4 层 transformer 做成分句法分析，WSJ 训练集上 F1 91.3，半监督设置下 92.7，超过了大部分已有模型。证明 transformer 不只对翻译有效，能泛化到其他 NLP 任务。
+在 Penn Treebank 上用 4 层 transformer 做成分句法分析，WSJ 训练集 F1 91.3，半监督 92.7，超过大部分已有模型。说明 transformer 不只适用于翻译，能泛化到其他 NLP 任务。
 
 ## 影响
 
-这篇论文的影响力不用多说。它直接催生了：
+这篇论文的影响怎么强调都不过分。它是现代 LLM 的基石：
 
-- **BERT**：双向 transformer encoder，把 NLP 各个任务的 SOTA 刷了一遍
-- **GPT 系列**：自回归 transformer decoder，一路从 GPT-1 到 GPT-4
-- **Vision Transformer（ViT）**：把 transformer 用到了图像上
-- **几乎所有的现代 LLM**：无一例外都是 transformer 架构
+- **BERT（2018）**：双向 transformer encoder，在 11 个 NLP 任务上刷 SOTA
+- **GPT 系列**：自回归 transformer decoder，从 GPT-1 到 GPT-4，一路 scaling
+- **ViT（2020）**：把 transformer 用到图像分类，证明 attention 可以替代卷积
+- **后续几乎所有 LLM**：无一例外都基于 transformer 架构
 
-可以说 2017 年之后的 NLP 和 LLM 发展史，都是在吃这篇论文的老本。
+可以说 2017 年之后的 NLP 发展史，很大程度上是在这篇论文划定的框架内迭代。
+
+## 几个有意思的点
+
+- 论文标题"Attention Is All You Need"刚好 5 个词，和作者人数一致，可能是故意的
+- 作者贡献说明里提到"Listing order is random"，这在 ML 论文里不多见
+- 消融实验中只用了一个开发集（newstest2013）做调参，没有反复在测试集上试，实验规范
 
 ## 总结
 
-这篇论文最大的贡献不是发明了一个新的机制（attention 之前就有），而是做出了一个**大胆的简化决策**：把 RNN 和 CNN 全部去掉，只用 attention，结果效果更好、训练更快。这种"少即是多"的思路，后来也影响了 ViT 把卷积去掉只用 attention。
+Attention Is All You Need 最大的贡献不是发明了 attention（之前就有），而是做了一个大胆的简化：**把 RNN 和 CNN 全部去掉，只用 attention 搭了整个模型**，结果效果更好、训练更快。这种"少即是多"的思路后来也启发了 ViT 把卷积去掉只用 attention。
 
-论文写作也很干净，实验设计规范，ablation 充分，读起来很舒服。如果你想理解现在所有大模型的基础架构，这篇是绕不过去的必读论文。
+如果你想理解现在所有大模型的基础架构，这篇论文是绕不过去的必读文献。
