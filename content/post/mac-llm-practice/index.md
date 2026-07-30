@@ -1,5 +1,5 @@
 ---
-title: "在 Mac 上跑本地 LLM 的实践"
+title: "Mac与本地LLM"
 description: "M1 Max 64GB 上跑了 8 个模型，9 维度实测对比"
 date: 2026-07-28T12:00:00+08:00
 draft: false
@@ -35,6 +35,8 @@ MacBook Pro 2021，M1 Max（10+24），64GB 内存。M1 Max 的内存带宽大�
 我自己跑下来的感受完全一致。同模型同量化等级，MLX 在首 token 速度上比 GGUF 快约 36%，连续工具调用的稳定性也好得多。LM Studio 从 v0.3.4 开始就原生支持 MLX 加载了，生态没什么障碍。
 
 当然如果你需要在 Mac、Linux、Windows 之间共用同一个模型文件，GGUF 更通用。但如果你只用 Mac，没理由不选 MLX。
+
+![MLX vs GGUF 速度对比](mlx-vs-gguf.png)
 
 ## 9 维度测试方法论
 
@@ -110,6 +112,8 @@ MacBook Pro 2021，M1 Max（10+24），64GB 内存。M1 Max 的内存带宽大�
 - Gemma-4 E4B（4B 参数）：约 3-4GB
 - Gemma-4 E2B（2B 参数）：约 1.5-2GB
 
+![内存占用对比](memory-chart.png)
+
 27B 全精度能跑，但跑完之后系统空闲内存不多了。如果要同时开 IDE、浏览器或者其他服务，4-bit 量化版更稳。35B-A3B 因为 MoE 特性反而比 27B 密集版还省内存，体验也快得多。
 
 小一点的模型如 Gemma E4B / E2B 门槛很低，16GB 内存的 Mac 也能跑。但实测下来 E4B 逻辑强但指令遵循弱，E2B 逻辑直接崩。小模型现阶段还是不够用，除非你的任务真的很简单。
@@ -124,6 +128,8 @@ MacBook Pro 2021，M1 Max（10+24），64GB 内存。M1 Max 的内存带宽大�
 | 速度 | 13 t/s | 54 t/s | 53 t/s | 47.5 t/s |
 | 稳定性 | 零事故 | 零事故 | 1 次循环 | 2 次循环 |
 | 视觉 | 9.5 | 8.5 | 9.0 | 7.5 |
+
+![官方 vs 去审查对比](official-vs-uncensored.png)
 
 Heretic 比 HauhauCS 高 6 分，稳定性也好一些（1 次循环 vs 2 次）。Fable-Fusion-711 用的也是 Heretic 方法（KL 散度仅 0.0469，对原分布改动很小），但叠了多层 fine-tune，总分反而被拉低了 3 分。说明去审查本身可以做到几乎无损，但叠太多魔改就会折损原模型的能力。
 
