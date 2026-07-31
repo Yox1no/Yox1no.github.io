@@ -2,6 +2,7 @@
 title: "Mac与本地LLM"
 description: "聊聊 Mac 上怎么选本地模型"
 date: 2026-07-28T12:00:00+08:00
+slug: "mac-llm"
 draft: false
 image: featured.jpg
 tags:
