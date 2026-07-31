@@ -4,6 +4,7 @@ description: "从合同、阵容到东部格局，聊聊老詹的第 24 个赛�
 date: 2026-07-31T20:00:00+08:00
 draft: false
 slug: "lebron-sixers-2026"
+image: featured.jpg
 tags:
   - NBA
   - 篮球
