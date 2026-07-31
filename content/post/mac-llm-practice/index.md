@@ -1,6 +1,6 @@
 ---
 title: "Mac与本地LLM"
-description: "M1 Max 64GB 上跑了 8 个模型，9 维度实测对比"
+description: "聊聊 Mac 上怎么选本地模型"
 date: 2026-07-28T12:00:00+08:00
 draft: false
 image: featured.jpg
