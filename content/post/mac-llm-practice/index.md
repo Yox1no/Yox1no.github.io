@@ -115,6 +115,8 @@ MacBook Pro 2021，M1 Max（10+24），64GB 内存。M1 Max 的内存带宽大�
 
 ![内存占用对比](memory-chart.png)
 
+我的数据和社区实测基本能对上。[willitrunai 的 MLX 指南](https://willitrunai.com/blog/qwen-3-5-mlx-apple-silicon-guide)列了 Qwen 各档位的内存占用：35B-A3B 4-bit 约 19.5GB、27B 4-bit 约 18GB、9B 4-bit 约 7GB，和我的数据在同一个量级。[Reddit 上一个 M1 Max 64GB 用户](https://www.reddit.com/r/LocalLLaMA/comments/1s0xmq0/question_llamacpp_performance_on_m1_max_qwen_27b)的 llama.cpp 实测也很有参考价值：Qwen 27B 在 Q8_0 / Q6_K / Q4_K_M 下的速度分别是 10.5 / 12 / 11.5 tok/s，不同量化等级速度几乎一样——这正好印证了前面说的：decode 是带宽瓶颈，不是算力瓶颈。
+
 27B 全精度能跑，但跑完之后系统空闲内存不多了。如果要同时开 IDE、浏览器或者其他服务，4-bit 量化版更稳。35B-A3B 因为 MoE 特性反而比 27B 密集版还省内存，体验也快得多。
 
 小一点的模型如 Gemma E4B / E2B 门槛很低，16GB 内存的 Mac 也能跑。但实测下来 E4B 逻辑强但指令遵循弱，E2B 逻辑直接崩。小模型现阶段还是不够用，除非你的任务真的很简单。
