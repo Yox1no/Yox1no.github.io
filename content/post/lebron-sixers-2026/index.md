@@ -17,14 +17,14 @@ categories:
 
 这笔签约值得拆开来看的细节很多：史无前例的降薪合同、76 人一个夏天的疯狂操作、东部已经变天的格局，以及老詹自己在这支球队里到底扮演什么角色。
 
+![LeBron James 加盟 76 人](featured.jpg)
+*图片来源：[ESPN](https://www.espn.com/nba/story/_/id/49440164/lebron-chooses-76ers-sign-2-year-8-million-contract)*
+
 ## 合同：史无前例的降薪
 
 LeBron 签的是 2 年 800 万美元的老将底薪合同，含球员选项和 15% 的交易保证金。2026-27 赛季他的薪水是 3,876,529 美元——比他新秀赛季（2003-04 赛季的 4,018,320 美元）还少，职业生涯最低。
 
 作为对比，他上赛季在湖人拿了接近 5300 万美元。这中间的差距，就是他为了"最后一舞"放弃的钱。
-
-![LeBron James 加盟 76 人](featured.jpg)
-*图片来源：[ESPN](https://www.espn.com/nba/story/_/id/49440164/lebron-chooses-76ers-sign-2-year-8-million-contract)*
 
 降薪的逻辑很直白：76 人的薪资结构已经锁死了。恩比德 5780 万、布朗 5770 万、马克西 4080 万，这三人加起来就吃掉了一大半工资帽。76 人没有空间直接签下老詹，只有底薪合同能塞得下他——同时也把后续操作空间留了出来。
 
@@ -57,6 +57,9 @@ LeBron 签的是 2 年 800 万美元的老将底薪合同，含球员选项和 1
 | VJ Edgecombe | 16.0 | 4.2 | 5.6 | 76 人 |
 
 首发五人上赛季场均得分合计 120.8 分。ClutchPoints 的原话是："**这套阵容在纸面上就是 2K 自建球队**"。
+
+![76 人首发五人组](starting-five.png)
+*图片来源：[NBA.com](https://www.nba.com/headshots)（球员官方头像拼合）*
 
 ## 为什么是 76 人
 
@@ -139,9 +142,9 @@ ESPN 引用一位接近情况的消息源说得很直接：
 
 ## 最后
 
-这笔签约对球迷来说心情复杂。老詹 41 岁还能让整个联盟为他停摆一个夏天，这件事本身就值得 respect。费城这套阵容的上限和下限都极端——要么一路打进总决赛拿下第 5 冠，要么因为球权、伤病和化学反应问题在第二轮就出局。
+这笔签约，对费城来说是梭哈，对老詹来说是最后一搏。41 岁还能让整个联盟为他停摆一个夏天，这件事本身就够传奇了。费城这套阵容的上限和下限都极端——要么一路打进总决赛拿下第 5 冠，要么因为球权、伤病和化学反应问题在第二轮就出局。但既然他选择了相信费城，那我也选择相信他。
 
-![LeBron James 的情绪时刻](lebron-emotional.jpg)
-*图片来源：[NBA.com](https://www.nba.com/news/lebron-james-fourth-free-agency-decision-philadelphia-sixers)*
+看了十来年他的比赛，这个夏天大概是看他打球以来最特别的一个休赛期。别的没什么好说的了。
 
-作为看了他快 20 年的老球迷，我只想说：King，最后一舞，尽情享受吧。
+![LeBron James](lebron-closeup.jpg)
+*图片来源：[Bleacher Report](https://bleacherreport.com/articles/25458331-lebron-james-76ers-jersey-revealed-trending-photo-team-confirms-contract-hype-video)*
