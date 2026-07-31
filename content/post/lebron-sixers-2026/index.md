@@ -17,9 +17,6 @@ categories:
 
 这笔签约值得拆开来看的细节很多：史无前例的降薪合同、76 人一个夏天的疯狂操作、东部已经变天的格局，以及老詹自己在这支球队里到底扮演什么角色。
 
-![LeBron James 加盟 76 人](featured.jpg)
-*图片来源：[ESPN](https://www.espn.com/nba/story/_/id/49440164/lebron-chooses-76ers-sign-2-year-8-million-contract)*
-
 ## 合同：史无前例的降薪
 
 LeBron 签的是 2 年 800 万美元的老将底薪合同，含球员选项和 15% 的交易保证金。2026-27 赛季他的薪水是 3,876,529 美元——比他新秀赛季（2003-04 赛季的 4,018,320 美元）还少，职业生涯最低。
@@ -146,5 +143,5 @@ ESPN 引用一位接近情况的消息源说得很直接：
 
 看了十来年他的比赛，这个夏天大概是看他打球以来最特别的一个休赛期。别的没什么好说的了。
 
-![LeBron James](lebron-closeup.jpg)
+![Enbiid、Maxey 与 LeBron 同框](lebron-vs-sixers.jpg)
 *图片来源：[Bleacher Report](https://bleacherreport.com/articles/25458331-lebron-james-76ers-jersey-revealed-trending-photo-team-confirms-contract-hype-video)*
