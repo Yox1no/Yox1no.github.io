@@ -64,7 +64,9 @@ AirLLM 是这三个里面最早、也最出名的。它的核心洞察很简单�
 
 三年时间，从 70B/4GB 走到 2.8T/3.72GB。后面几个 MoE 模型能压到这么低，是因为稀疏 MoE 一次只流式加载一个专家，而不是整层——这已经是在往 Colibri 的方向靠了。
 
-当然代价也很明显：**慢**。层要从磁盘反复加载，PCIe 传输和硬盘 I/O 是瓶颈。社区实测 70B 大概 0.1-0.2 t/s，5-10 秒一个字；405B 直接掉到 0.02-0.05 t/s，20-50 秒一个字。Reddit 上的评价很一致："possible but… going to be slow"。
+当然代价也很明显：**慢**。层要从磁盘反复加载，PCIe 传输和硬盘 I/O 是瓶颈。LinkedIn 上有人算了笔账：70B 模型约 96 层，每层约 1.5GB，PCIe 4.0 传一层就要约 45ms，加计算时间，**大约 5 秒生成一个 token**。YouTube 上的实测视频说得更直白：单个 token 可能要 5 秒到 1 分钟不等，对比 ChatGPT 的 30-50 t/s，"就像用信鸽寄信一样等每一个字"。
+
+Reddit 上的评价也很一致："possible but… going to be slow"。有一篇 [Towards AI 的实测文章](https://pub.towardsai.net/run-70b-llms-on-4gb-gpu-with-airllm-795185975f3b)作者本来准备花 $200 租云 GPU 跑一次 Llama 70B 推理测试，结果用 AirLLM 在 4GB 显卡上跑成了，但结论也明确：**这种方案适合离线批处理、研究、预算有限的实验，不适合实时交互**。
 
 但它的意义不在于快。它证明了：**限制不是物理的，是设计的**。你以为需要 80GB 显存才能跑的模型，其实 4GB 就能跑——只是慢。
 
@@ -97,6 +99,26 @@ Colibri 是今年 7 月刚出的项目，上来就在 Hacker News 炸了：[Show
 
 注意第一行：**0.05-0.1 t/s，作者把它写在 README 第一屏**。这种把难看数字诚实摆出来的态度，在开源社区很少见，也很值得respect。
 
+[官方 benchmarks 文档](https://github.com/JustVugg/colibri/blob/main/docs/benchmarks.md)里还有一整张社区实测表，都是用户跑出来的真实数字：
+
+| 设备 | 关键配置 | 实测速度 |
+|------|---------|---------|
+| Apple M5 Max 128GB（CPU） | 默认，MTP off | 1.06 t/s |
+| Apple M5 Max 128GB（Metal） | Metal on，warm pin 39.7GB | 1.83 t/s |
+| Apple M5 Max 128GB（Metal，更大 pin） | 46.9GB pin | 2.06 t/s |
+| Mac Mini M4 Pro 48GB（Metal） | Metal on，--ram 38 | 0.30 t/s |
+| Ryzen AI 9 HX 370（Framework 13） | 128GB，int8 MTP | 0.37 t/s |
+| Ryzen 9 9950X 123GB（PCIe3 SSD） | 默认 | 0.10 t/s |
+| 同上，换 PCIe5 SSD（8.81 GB/s） | 换盘后 | **0.28 t/s** |
+| Ryzen 7 9800X3D + RTX 5090（70GB） | MTP off，learned pin | 0.41-0.52 t/s |
+| Ryzen 9 9950X3D + RTX 5090（121GB） | PCIe Gen5，O_DIRECT | 1.23 t/s |
+| EPYC 7443 430GB RAM | 77.5GB pin，hit 98% | 1.00 t/s |
+| 6× RTX 5090（作者主机） | 全驻留，CUDA pipe | 5.8-6.8 t/s |
+
+这张表特别有信息量。**9950X 那对数据是最干净的对照实验**：同一台机器、同样的历史缓存，只换了硬盘——PCIe 3.0 到 PCIe 5.0，磁盘带宽 ×5.8，速度从 0.10 提到 0.28 t/s（×2.9），耗时分布从 66% 磁盘变成 57% 计算。这直接证明了解码的瓶颈在哪：**硬盘够快之后，瓶颈就轮到 CPU 算了**。
+
+还有个反直觉的点：9800X3D + RTX 5090 的组合只有 0.41-0.52 t/s，而 128GB 纯 CPU 的 M5 Max 能到 1.83-2.06 t/s。作者在 [README](https://github.com/JustVugg/colibri) 里也强调过：**瓶颈在 RAM 大小，不在 GPU**。显卡的 VRAM 装不下专家集，GPU 只能闲着；反而是内存够大、能把热专家 pin 在内存里的机器更快。
+
 还有个有趣的细节：HN 评论区有人吐槽 Colibri 的 README 里"honest"这个词用得太多了，说这是 AI 生成文本的标志。作者用 AI 协助开发这点倒也没藏着掖着。这个插曲挺真实——本地 AI 社区正在一边拥抱 AI 写代码，一边互相警惕 AI 味。
 
 Colibri 的另一个亮点是它的**可视化**：网页面板里有个 "Brain" 页面，把 19,456 个专家当成一个活的皮层来显示——颜色代表存储层级，亮度代表路由热度，每个被路由到的专家都会闪白；还有个 "Atlas" 页面，把 13,260 个实测过的专家按主题聚类成一个 3D 星系（诗歌、法律、中文、SQL……）。一个推理引擎把可视化做成这样，真的很用心。
@@ -125,6 +147,8 @@ Colibri 的另一个亮点是它的**可视化**：网页面板里有个 "Brain"
 
 34 t/s 的生成速度，对比 Colibri 的 6.8 t/s 和 AirLLM 的 0.1-2 t/s，完全不是一个数量级。这就是"专一"的回报。
 
+社区数据也很丰富。antirez 在[另一篇博客](https://antirez.com/news/167)里提到：**"M5 Max 128GB 能跑 DeepSeek v4 Flash，2-bit 量化，预填充约 500 t/s，解码约 35-40 t/s"**——比 README 数字还快，因为优化一直在推进。还有日本开发者写了 [12 天实测记录](https://note.com/ngc_shj/n/n505c3ea0f3f9)，专门跑 DGX Spark 上的 DwarfStar。社区在 [NVIDIA 论坛](https://forums.developer.nvidia.com/t/a-spark-to-beat-m5-ultra-and-a-megaspark-to-beat-2x-rubin-pro-6000/372947)上的讨论也验证了 DGX Spark（GB10）在预填充上的优势：1,723 t/s 的提示处理，解码 38.55 t/s。
+
 antirez 还做了一件特别坦诚的事——在 README 里放了一段 [AI full disclosure](https://github.com/antirez/ds4#ai-full-disclosure)：
 
 > 这个软件是在 GPT 5.5、5.6、Claude Fable 的大力协助下开发的，人类主导想法、测试和调试。我们公开说这件事，因为它塑造了项目怎么被构建。如果你不喜欢 AI 写的代码，这软件不适合你。
@@ -147,7 +171,7 @@ antirez 还做了一件特别坦诚的事——在 README 里放了一段 [AI fu
 - 2026 年：**烂机上能跑**（Colibri，744B 在 25GB 笔记本上）
 - 2026 年：**本地跑得爽**（DwarfStar，准前沿模型 34 t/s）
 
-还有个共同的硬件悖论值得单独说：**瓶颈在 RAM 大小，不在 GPU**。Colibri 在 128GB RAM 的纯 CPU 机器上能到 1.8 t/s，比 5090 + 32GB 还快；antirez 也公开说过 Mac Studio 512GB 这种"内存优先"方案的合理性。本地推理的真正瓶颈是内存带宽与容量，显卡反而排后面。
+还有个共同的硬件悖论值得单独说：**瓶颈在 RAM 大小，不在 GPU**。Colibri 的社区实测里，9800X3D + RTX 5090（70GB RAM）只有 0.41-0.52 t/s，而 128GB 纯 CPU 的 M5 Max 能到 1.83-2.06 t/s——显卡装不下专家集，GPU 只能闲着。antirez 也公开说过 Mac Studio 512GB 这种"内存优先"方案的合理性。本地推理的真正瓶颈是内存带宽与容量，显卡反而排后面。
 
 ## 最后
 
