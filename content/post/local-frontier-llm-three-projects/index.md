@@ -58,8 +58,6 @@ AirLLM 是这三个里面最早、也最出名的。它的核心洞察很简单�
 
 ![AirLLM 量化加速](airllm-time-improvement.png)
 
-<p style="text-align: center;">图片来源：<a href="https://github.com/lyogavin/airllm">AirLLM 官方 README</a></p>
-
 这个项目最精彩的部分其实是它的**演进时间线**。从 [README 的更新记录](https://github.com/lyogavin/airllm#updates)可以清楚看到：
 
 - **2023.11**：初版，70B 在 4GB 显卡上跑起来
@@ -73,8 +71,6 @@ AirLLM 是这三个里面最早、也最出名的。它的核心洞察很简单�
 AirLLM 的火爆程度可以从 [star 历史曲线](https://star-history.com/#lyogavin/airllm&Timeline)看出来——2023 年发布后稳步爬坡，2026 年初突然加速，现在 24.5k stars：
 
 ![AirLLM star 历史](airllm-star-history.png)
-
-<p style="text-align: center;">图片来源：<a href="https://star-history.com/#lyogavin/airllm&Timeline">star-history.com</a></p>
 
 当然代价也很明显：**慢**。层要从磁盘反复加载，PCIe 传输和硬盘 I/O 是瓶颈。LinkedIn 上有人算了笔账：70B 模型约 96 层，每层约 1.5GB，PCIe 4.0 传一层就要约 45ms，加计算时间，**大约 5 秒生成一个 token**。YouTube 上的实测视频说得更直白：单个 token 可能要 5 秒到 1 分钟不等，对比 ChatGPT 的 30-50 t/s，"就像用信鸽寄信一样等每一个字"。
 
@@ -137,13 +133,9 @@ Colibri 的另一个亮点是它的**可视化**：网页面板里有个 "Brain"
 
 ![Colibri Brain 页面：19,456 个专家组成的活皮层](colibri-brain.png)
 
-<p style="text-align: center;">图片来源：<a href="https://github.com/JustVugg/colibri">Colibri 官方 README</a></p>
-
 还有个 "Atlas" 页面，把 13,260 个实测过的专家按主题聚类成一个 3D 星系——诗歌、法律、中文、SQL 各自形成星座，通用专家沉在核心，拖拽就能旋转：
 
 ![Colibri Atlas 页面：3D 专家星系](colibri-atlas.png)
-
-<p style="text-align: center;">图片来源：<a href="https://github.com/JustVugg/colibri">Colibri 官方 README</a></p>
 
 一个推理引擎把可视化做成这样，真的很用心——跑模型的间隙，盯着屏幕看哪几个专家在被反复点亮，还挺有观察显微镜的感觉。
 
@@ -174,8 +166,6 @@ Colibri 的另一个亮点是它的**可视化**：网页面板里有个 "Brain"
 [官方 speed-bench](https://github.com/antirez/ds4/tree/main/speed-bench) 里还画了预填充/生成速度随上下文变化的曲线（以 M3 Max 为例）——可以看到预填充随上下文长度增长明显下降，而生成速度相对平稳，这是 KV cache 占带宽的典型特征：
 
 ![DwarfStar M3 Max 速度曲线](ds4-m3-max-speed.png)
-
-<p style="text-align: center;">图片来源：<a href="https://github.com/antirez/ds4/tree/main/speed-bench">DwarfStar 官方 speed-bench</a></p>
 
 社区数据也很丰富。antirez 在[另一篇博客](https://antirez.com/news/167)里提到：**"M5 Max 128GB 能跑 DeepSeek v4 Flash，2-bit 量化，预填充约 500 t/s，解码约 35-40 t/s"**——比 README 数字还快，因为优化一直在推进。还有日本开发者写了 [12 天实测记录](https://note.com/ngc_shj/n/n505c3ea0f3f9)，专门跑 DGX Spark 上的 DwarfStar。社区在 [NVIDIA 论坛](https://forums.developer.nvidia.com/t/a-spark-to-beat-m5-ultra-and-a-megaspark-to-beat-2x-rubin-pro-6000/372947)上的讨论也验证了 DGX Spark（GB10）在预填充上的优势：1,723 t/s 的提示处理，解码 38.55 t/s。
 
