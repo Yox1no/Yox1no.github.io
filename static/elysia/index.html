@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elysia ♡ 爱莉希雅</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(160deg, #fff5f8 0%, #ffe4ec 45%, #ffd6e3 100%);
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        /* 飘落的花瓣 */
+        .petal {
+            position: fixed;
+            top: -20px;
+            border-radius: 50% 0 50% 50%;
+            background: linear-gradient(135deg, #ffb3cc, #ff8fb3);
+            opacity: 0.55;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0%   { transform: translateY(-20px) rotate(0deg); }
+            100% { transform: translateY(110vh) rotate(720deg); }
+        }
+
+        .card {
+            max-width: 960px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(255, 105, 160, 0.25);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 18px;
+            display: block;
+            box-shadow: 0 8px 30px rgba(255, 90, 150, 0.25);
+        }
+
+        .title {
+            margin-top: 26px;
+            font-size: 42px;
+            font-weight: 700;
+            color: #e0558e;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #b76e8f;
+            letter-spacing: 1.5px;
+        }
+
+        .divider {
+            width: 90px;
+            height: 3px;
+            margin: 22px auto;
+            background: linear-gradient(90deg, #ffb3cc, #e0558e, #ffb3cc);
+            border-radius: 3px;
+        }
+
+        .desc {
+            font-size: 16px;
+            line-height: 1.9;
+            color: #8d5a73;
+            max-width: 620px;
+            margin: 0 auto;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 28px;
+            padding: 10px 28px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #ff8fb3, #e0558e);
+            color: #fff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(224, 85, 142, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(224, 85, 142, 0.45);
+        }
+
+        footer {
+            margin-top: 24px;
+            font-size: 13px;
+            color: #c08aa4;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 飘落花瓣 -->
+    <script>
+        for (let i = 0; i < 18; i++) {
+            const p = document.createElement('div');
+            p.className = 'petal';
+            const size = 8 + Math.random() * 14;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (7 + Math.random() * 9) + 's';
+            p.style.animationDelay = (Math.random() * 8) + 's';
+            document.body.appendChild(p);
+        }
+    </script>
+
+    <div class="card">
+        <img src="elysia-hero.jpg" alt="爱莉希雅 Elysia">
+        <h1 class="title">嗨♪ 我是爱莉希雅</h1>
+        <p class="subtitle">新的一天，从一场美妙的邂逅开始～♪</p>
+        <div class="divider"></div>
+        <p class="desc">
+            粉色妖精小姐，永远为你盛开～♡<br>
+            这里是属于我的小小花园，欢迎随时来做客。
+        </p>
+        <a class="back" href="/">← 回到博客</a>
+    </div>
+
+    <footer>© 2026 Yox1no's Blog · ♡ Made with love for Elysia</footer>
+</body>
+</html>
